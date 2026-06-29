@@ -3,12 +3,14 @@ import pandas as pd
 
 from utils.ranking import obtener_ranking
 
+from utils.style import aplicar_estilo
+
 st.set_page_config(
     page_title="Pádel SL",
     page_icon="assets/logo_psl.png",
     layout="wide"
 )
-
+aplicar_estilo()
 # ==========================
 # DATOS
 # ==========================
