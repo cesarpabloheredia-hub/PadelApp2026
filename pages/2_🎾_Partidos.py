@@ -1,0 +1,141 @@
+import streamlit as st
+import pandas as pd
+from datetime import date
+import os
+
+st.title("🎾 Registrar Partido")
+
+JUGADORES = [
+    "Pablo Heredia",
+    "Flavio Aguirre",
+    "Cristian Perez",
+    "Armando Perez",
+    "Ignacio Perez",
+    "Sebastian Gomez",
+    "Lautaro Martinez"
+]
+
+fecha = st.date_input(
+    "📅 Fecha",
+    value=date.today()
+)
+
+st.divider()
+
+st.subheader("Pareja A")
+
+col1, col2 = st.columns(2)
+
+with col1:
+    jugador1 = st.selectbox(
+        "Jugador 1",
+        JUGADORES,
+        key="j1"
+    )
+
+with col2:
+    disponibles = [j for j in JUGADORES if j != jugador1]
+
+    jugador2 = st.selectbox(
+        "Jugador 2",
+        disponibles,
+        key="j2"
+    )
+
+st.divider()
+
+st.subheader("Pareja B")
+
+disponibles = [
+    j for j in JUGADORES
+    if j not in [jugador1, jugador2]
+]
+
+col3, col4 = st.columns(2)
+
+with col3:
+
+    jugador3 = st.selectbox(
+        "Jugador 3",
+        disponibles,
+        key="j3"
+    )
+
+with col4:
+
+    disponibles2 = [
+        j for j in disponibles
+        if j != jugador3
+    ]
+
+    jugador4 = st.selectbox(
+        "Jugador 4",
+        disponibles2,
+        key="j4"
+    )
+
+st.divider()
+
+ganador = st.radio(
+    "🏆 Pareja Ganadora",
+    [
+        "Pareja A",
+        "Pareja B"
+    ],
+    horizontal=True
+)
+
+if st.button(
+    "💾 Registrar Partido",
+    use_container_width=True
+):
+
+    if ganador == "Pareja A":
+
+        ganador1 = jugador1
+        ganador2 = jugador2
+
+    else:
+
+        ganador1 = jugador3
+        ganador2 = jugador4
+
+    nuevo = pd.DataFrame([{
+
+        "fecha": fecha,
+
+        "jugador1": jugador1,
+        "jugador2": jugador2,
+        "jugador3": jugador3,
+        "jugador4": jugador4,
+
+        "ganador1": ganador1,
+        "ganador2": ganador2
+
+    }])
+
+    archivo = "data/partidos.csv"
+
+    if os.path.exists(archivo):
+
+        partidos = pd.read_csv(archivo)
+
+        partidos = pd.concat(
+            [partidos, nuevo],
+            ignore_index=True
+        )
+
+    else:
+
+        partidos = nuevo
+
+    partidos.to_csv(
+        archivo,
+        index=False
+    )
+
+    st.success("✅ Partido registrado correctamente.")
+
+    st.balloons()
+
+    st.rerun()
