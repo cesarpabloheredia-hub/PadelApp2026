@@ -126,3 +126,24 @@ if st.session_state.get("partido_ok"):
     st.toast("🎾 Partido guardado")
 
     st.session_state["partido_ok"] = False
+
+    st.divider()
+
+if st.button("🧹 Reset estadísticas (BORRAR TODO)", type="secondary"):
+    
+    import pandas as pd
+
+    df = pd.DataFrame(columns=[
+        "fecha",
+        "jugador1",
+        "jugador2",
+        "jugador3",
+        "jugador4",
+        "ganador1",
+        "ganador2"
+    ])
+
+    df.to_csv("data/partidos.csv", index=False)
+
+    st.success("✔ Estadísticas reseteadas correctamente")
+    st.toast("🧹 Datos eliminados")
