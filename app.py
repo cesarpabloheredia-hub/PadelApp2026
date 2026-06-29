@@ -26,7 +26,7 @@ except:
 # TITULO
 # ==========================
 
-st.title("🎾 Liga de Pádel Heredia")
+st.title("🎾 Pádel 2026")
 st.caption("Temporada 2026")
 
 st.divider()
