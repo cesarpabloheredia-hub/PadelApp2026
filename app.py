@@ -5,7 +5,7 @@ from utils.ranking import obtener_ranking
 
 st.set_page_config(
     page_title="Pádel SL",
-    page_icon="🎾",
+    page_icon="assets/logo_psl.png",
     layout="wide"
 )
 
@@ -26,7 +26,13 @@ except:
 # TITULO
 # ==========================
 
-st.title("🎾 Pádel 2026")
+from PIL import Image
+
+logo = Image.open("assets/logo_psl.png")
+
+st.image(logo, width=180)
+
+st.title("🎾 Pádel SL")
 st.caption("Temporada 2026")
 
 st.divider()
