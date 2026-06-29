@@ -4,7 +4,7 @@ import pandas as pd
 from utils.ranking import obtener_ranking
 
 st.set_page_config(
-    page_title="Pádel 2026",
+    page_title="Pádel SL",
     page_icon="🎾",
     layout="wide"
 )
