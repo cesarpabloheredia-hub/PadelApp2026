@@ -87,14 +87,42 @@ ganador = st.radio(
 
 if st.button("💾 Registrar Partido", use_container_width=True):
 
-    # marcar que se registró el partido
+    # guardar estado
     st.session_state["partido_ok"] = True
 
-# 👇 esto va FUERA del botón (pero justo después en el código)
-if "partido_ok" in st.session_state and st.session_state["partido_ok"]:
+    # lógica de ganador
+    if ganador == "Pareja A":
+        ganador1 = jugador1
+        ganador2 = jugador2
+    else:
+        ganador1 = jugador3
+        ganador2 = jugador4
 
-    st.success("Partido guardado ✔")
-    st.toast("✅ Partido registrado correctamente")
+    nuevo = pd.DataFrame([{
+        "fecha": fecha,
+        "jugador1": jugador1,
+        "jugador2": jugador2,
+        "jugador3": jugador3,
+        "jugador4": jugador4,
+        "ganador1": ganador1,
+        "ganador2": ganador2
+    }])
 
-    # resetear estado para que no se repita siempre
+    archivo = "data/partidos.csv"
+
+    if os.path.exists(archivo):
+        partidos = pd.read_csv(archivo)
+        partidos = pd.concat([partidos, nuevo], ignore_index=True)
+    else:
+        partidos = nuevo
+
+    partidos.to_csv(archivo, index=False)
+
+
+# 👇 ESTE BLOQUE VA FUERA DEL BOTÓN (MUY IMPORTANTE)
+if st.session_state.get("partido_ok"):
+
+    st.success("✔ Partido registrado correctamente")
+    st.toast("🎾 Partido guardado")
+
     st.session_state["partido_ok"] = False
