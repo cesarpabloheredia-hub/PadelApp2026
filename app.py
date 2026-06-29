@@ -28,12 +28,6 @@ except:
 # TITULO
 # ==========================
 
-from PIL import Image
-
-logo = Image.open("assets/logo_psl.png")
-
-st.image(logo, width=180)
-
 st.title("🎾 Pádel SL")
 st.caption("Temporada 2026")
 
