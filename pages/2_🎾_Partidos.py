@@ -4,7 +4,7 @@ from datetime import date
 import os
 
 st.title("🎾 Registrar Partido")
-
+st.write("APP CARGADA ✔")
 JUGADORES = [
     "Pablo Heredia",
     "Flavio Aguirre",
@@ -85,57 +85,16 @@ ganador = st.radio(
     horizontal=True
 )
 
-if st.button(
-    "💾 Registrar Partido",
-    use_container_width=True
-):
+if st.button("💾 Registrar Partido", use_container_width=True):
 
-    if ganador == "Pareja A":
+    # marcar que se registró el partido
+    st.session_state["partido_ok"] = True
 
-        ganador1 = jugador1
-        ganador2 = jugador2
+# 👇 esto va FUERA del botón (pero justo después en el código)
+if "partido_ok" in st.session_state and st.session_state["partido_ok"]:
 
-    else:
+    st.success("Partido guardado ✔")
+    st.toast("✅ Partido registrado correctamente")
 
-        ganador1 = jugador3
-        ganador2 = jugador4
-
-    nuevo = pd.DataFrame([{
-
-        "fecha": fecha,
-
-        "jugador1": jugador1,
-        "jugador2": jugador2,
-        "jugador3": jugador3,
-        "jugador4": jugador4,
-
-        "ganador1": ganador1,
-        "ganador2": ganador2
-
-    }])
-
-    archivo = "data/partidos.csv"
-
-    if os.path.exists(archivo):
-
-        partidos = pd.read_csv(archivo)
-
-        partidos = pd.concat(
-            [partidos, nuevo],
-            ignore_index=True
-        )
-
-    else:
-
-        partidos = nuevo
-
-    partidos.to_csv(
-        archivo,
-        index=False
-    )
-
-    st.success("✅ Partido registrado correctamente.")
-
-    st.balloons()
-
-    st.rerun()
+    # resetear estado para que no se repita siempre
+    st.session_state["partido_ok"] = False
