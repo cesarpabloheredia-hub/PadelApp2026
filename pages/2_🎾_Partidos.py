@@ -3,6 +3,8 @@ import pandas as pd
 from datetime import date
 import os
 
+from utils.database import guardar_partido
+
 st.title("🎾 Registrar Partido")
 st.write("APP CARGADA ✔")
 JUGADORES = [
@@ -117,7 +119,16 @@ if st.button("💾 Registrar Partido", use_container_width=True):
         partidos = nuevo
 
     partidos.to_csv(archivo, index=False)
-
+    
+guardar_partido({
+    "fecha": str(fecha),
+    "jugador1": jugador1,
+    "jugador2": jugador2,
+    "jugador3": jugador3,
+    "jugador4": jugador4,
+    "ganador1": ganador1,
+    "ganador2": ganador2
+})
 
 # 👇 ESTE BLOQUE VA FUERA DEL BOTÓN (MUY IMPORTANTE)
 if st.session_state.get("partido_ok"):
