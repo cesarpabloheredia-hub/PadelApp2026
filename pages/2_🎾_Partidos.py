@@ -167,5 +167,5 @@ if password == "PadelSL2026":
             st.success("✅ Todas las estadísticas fueron eliminadas.")
             st.toast("🧹 Base de datos reiniciada")
 
-elif password != "":
+elif password != "Padel2026":
     st.error("❌ Contraseña incorrecta")
