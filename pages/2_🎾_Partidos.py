@@ -129,21 +129,43 @@ if st.session_state.get("partido_ok"):
 
     st.divider()
 
-if st.button("🧹 Reset estadísticas (BORRAR TODO)", type="secondary"):
-    
-    import pandas as pd
+st.divider()
 
-    df = pd.DataFrame(columns=[
-        "fecha",
-        "jugador1",
-        "jugador2",
-        "jugador3",
-        "jugador4",
-        "ganador1",
-        "ganador2"
-    ])
+st.subheader("🔒 Área de Administrador")
 
-    df.to_csv("data/partidos.csv", index=False)
+password = st.text_input(
+    "Contraseña de administrador",
+    type="password"
+)
 
-    st.success("✔ Estadísticas reseteadas correctamente")
-    st.toast("🧹 Datos eliminados")
+if password == "PadelSL2026":
+
+    st.success("✅ Acceso autorizado")
+
+    confirmar = st.checkbox(
+        "⚠️ Confirmo que deseo eliminar TODOS los partidos y estadísticas."
+    )
+
+    if confirmar:
+
+        if st.button("🧹 BORRAR TODO", type="primary"):
+
+            import pandas as pd
+
+            df = pd.DataFrame(columns=[
+                "fecha",
+                "jugador1",
+                "jugador2",
+                "jugador3",
+                "jugador4",
+                "ganador1",
+                "ganador2"
+            ])
+
+            df.to_csv("data/partidos.csv", index=False)
+
+            st.success("✅ Todas las estadísticas fueron eliminadas.")
+            st.toast("🧹 Base de datos reiniciada")
+
+elif password != "":
+    st.error("❌ Contraseña incorrecta")
