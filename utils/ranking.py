@@ -1,4 +1,5 @@
 import pandas as pd
+from utils.database import obtener_partidos
 
 JUGADORES = [
     "Pablo Heredia",
@@ -13,13 +14,12 @@ JUGADORES = [
 
 def obtener_ranking():
 
-    try:
+    partidos = obtener_partidos()
 
-        partidos = pd.read_csv("data/partidos.csv")
-
-    except:
-
+    if len(partidos) == 0:
         return pd.DataFrame()
+
+    partidos = pd.DataFrame(partidos)
 
     ranking = []
 

@@ -13,8 +13,15 @@ def guardar_partido(datos):
     return supabase.table("partidos").insert(datos).execute()
 
 def obtener_partidos():
-    respuesta = supabase.table("partidos").select("*").execute()
-    return respuesta.data if respuesta.data else []
+    respuesta = (
+        supabase
+        .table("partidos")
+        .select("*")
+        .order("id")
+        .execute()
+    )
+
+    return respuesta.data
 
 def borrar_todo():
     return supabase.table("partidos").delete().neq("id", 0).execute()
