@@ -120,15 +120,19 @@ if st.button("💾 Registrar Partido", use_container_width=True):
 
     partidos.to_csv(archivo, index=False)
     
-guardar_partido({
-    "fecha": str(fecha),
-    "jugador1": jugador1,
-    "jugador2": jugador2,
-    "jugador3": jugador3,
-    "jugador4": jugador4,
-    "ganador1": ganador1,
-    "ganador2": ganador2
-})
+try:
+    guardar_partido({
+        "fecha": str(fecha),
+        "jugador1": jugador1,
+        "jugador2": jugador2,
+        "jugador3": jugador3,
+        "jugador4": jugador4,
+        "ganador1": ganador1,
+        "ganador2": ganador2
+    })
+
+except Exception as e:
+    st.exception(e)
 
 # 👇 ESTE BLOQUE VA FUERA DEL BOTÓN (MUY IMPORTANTE)
 if st.session_state.get("partido_ok"):
