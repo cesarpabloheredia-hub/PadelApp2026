@@ -1,16 +1,17 @@
 import streamlit as st
 import pandas as pd
 
+from utils.database import obtener_partidos
+
 st.title("🤝 Ranking de Parejas")
 
-try:
+partidos = obtener_partidos()
 
-    partidos = pd.read_csv("data/partidos.csv")
-
-except:
-
+if len(partidos) == 0:
     st.warning("Todavía no hay partidos cargados.")
     st.stop()
+
+partidos = pd.DataFrame(partidos)
 
 parejas = {}
 
