@@ -3,10 +3,11 @@ import pandas as pd
 from datetime import date
 import os
 
-from utils.database import guardar_partido
+from utils.database import guardar_partido, borrar_todo
 
 st.title("🎾 Registrar Partido")
 st.write("APP CARGADA ✔")
+
 JUGADORES = [
     "Pablo Heredia",
     "Flavio Aguirre",
@@ -89,10 +90,8 @@ ganador = st.radio(
 
 if st.button("💾 Registrar Partido", use_container_width=True):
 
-    # guardar estado
     st.session_state["partido_ok"] = True
 
-    # lógica de ganador
     if ganador == "Pareja A":
         ganador1 = jugador1
         ganador2 = jugador2
@@ -119,30 +118,27 @@ if st.button("💾 Registrar Partido", use_container_width=True):
         partidos = nuevo
 
     partidos.to_csv(archivo, index=False)
-    
-try:
-    guardar_partido({
-        "fecha": str(fecha),
-        "jugador1": jugador1,
-        "jugador2": jugador2,
-        "jugador3": jugador3,
-        "jugador4": jugador4,
-        "ganador1": ganador1,
-        "ganador2": ganador2
-    })
 
-except Exception as e:
-    st.exception(e)
+    try:
+        guardar_partido({
+            "fecha": str(fecha),
+            "jugador1": jugador1,
+            "jugador2": jugador2,
+            "jugador3": jugador3,
+            "jugador4": jugador4,
+            "ganador1": ganador1,
+            "ganador2": ganador2
+        })
 
-# 👇 ESTE BLOQUE VA FUERA DEL BOTÓN (MUY IMPORTANTE)
+    except Exception as e:
+        st.exception(e)
+
 if st.session_state.get("partido_ok"):
 
     st.success("✔ Partido registrado correctamente")
     st.toast("🎾 Partido guardado")
 
     st.session_state["partido_ok"] = False
-
-    st.divider()
 
 st.divider()
 
@@ -153,34 +149,29 @@ password = st.text_input(
     type="password"
 )
 
-if password == "PadelSL2026":
+if password:
 
-    st.success("✅ Acceso autorizado")
+    if password == "PadelSL2026":
 
-    confirmar = st.checkbox(
-        "⚠️ Confirmo que deseo eliminar TODOS los partidos y estadísticas."
-    )
+        st.success("✅ Acceso autorizado")
 
-    if confirmar:
+        confirmar = st.checkbox(
+            "⚠️ Confirmo que deseo eliminar TODOS los partidos y estadísticas."
+        )
 
-        if st.button("🧹 BORRAR TODO", type="primary"):
+        if confirmar:
 
-            import pandas as pd
+            if st.button("🧹 BORRAR TODO", type="primary"):
 
-            df = pd.DataFrame(columns=[
-                "fecha",
-                "jugador1",
-                "jugador2",
-                "jugador3",
-                "jugador4",
-                "ganador1",
-                "ganador2"
-            ])
+                try:
+                    borrar_todo()
 
-            df.to_csv("data/partidos.csv", index=False)
+                    st.success("✅ Todos los partidos fueron eliminados.")
+                    st.toast("🧹 Base de datos reiniciada")
 
-            st.success("✅ Todas las estadísticas fueron eliminadas.")
-            st.toast("🧹 Base de datos reiniciada")
+                except Exception as e:
+                    st.exception(e)
 
-elif password != "Padel2026":
-    st.error("❌ Contraseña incorrecta")
+    else:
+
+        st.error("❌ Contraseña incorrecta")
