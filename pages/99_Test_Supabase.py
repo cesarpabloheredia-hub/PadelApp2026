@@ -1,14 +1,16 @@
 import streamlit as st
-from utils.database import probar_conexion
 
 st.title("🧪 Test Supabase")
 
-if st.button("Probar conexión"):
+try:
+    import utils.database as db
 
-    try:
-        respuesta = probar_conexion()
-        st.success("✅ Conexión correcta")
+    st.success("✅ Se importó database.py correctamente")
+
+    if st.button("Probar conexión"):
+        respuesta = db.probar_conexion()
+        st.success("Conexión OK")
         st.write(respuesta.data)
 
-    except Exception as e:
-        st.error(e)
+except Exception as e:
+    st.exception(e)
