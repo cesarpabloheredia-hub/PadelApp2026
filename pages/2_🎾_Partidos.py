@@ -1,7 +1,5 @@
 import streamlit as st
-import pandas as pd
 from datetime import date
-import os
 
 from utils.database import guardar_partido, borrar_todo
 
@@ -99,25 +97,19 @@ if st.button("💾 Registrar Partido", use_container_width=True):
         ganador1 = jugador3
         ganador2 = jugador4
 
-    nuevo = pd.DataFrame([{
-        "fecha": fecha,
+try:
+    guardar_partido({
+        "fecha": str(fecha),
         "jugador1": jugador1,
         "jugador2": jugador2,
         "jugador3": jugador3,
         "jugador4": jugador4,
         "ganador1": ganador1,
         "ganador2": ganador2
-    }])
+    })
 
-    archivo = "data/partidos.csv"
-
-    if os.path.exists(archivo):
-        partidos = pd.read_csv(archivo)
-        partidos = pd.concat([partidos, nuevo], ignore_index=True)
-    else:
-        partidos = nuevo
-
-    partidos.to_csv(archivo, index=False)
+except Exception as e:
+    st.exception(e)
 
     try:
         guardar_partido({
