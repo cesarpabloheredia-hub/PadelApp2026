@@ -86,9 +86,11 @@ ganador = st.radio(
     horizontal=True
 )
 
-if st.button("💾 Registrar Partido", use_container_width=True):
+# ===========================
+# REGISTRAR PARTIDO
+# ===========================
 
-    st.session_state["partido_ok"] = True
+if st.button("💾 Registrar Partido", use_container_width=True):
 
     if ganador == "Pareja A":
         ganador1 = jugador1
@@ -97,21 +99,8 @@ if st.button("💾 Registrar Partido", use_container_width=True):
         ganador1 = jugador3
         ganador2 = jugador4
 
-try:
-    guardar_partido({
-        "fecha": str(fecha),
-        "jugador1": jugador1,
-        "jugador2": jugador2,
-        "jugador3": jugador3,
-        "jugador4": jugador4,
-        "ganador1": ganador1,
-        "ganador2": ganador2
-    })
-
-except Exception as e:
-    st.exception(e)
-
     try:
+
         guardar_partido({
             "fecha": str(fecha),
             "jugador1": jugador1,
@@ -122,10 +111,18 @@ except Exception as e:
             "ganador2": ganador2
         })
 
+        st.session_state["partido_ok"] = True
+
     except Exception as e:
+
+        st.session_state["partido_ok"] = False
         st.exception(e)
 
-if st.session_state.get("partido_ok"):
+# ===========================
+# MENSAJE DE ÉXITO
+# ===========================
+
+if st.session_state.get("partido_ok", False):
 
     st.success("✔ Partido registrado correctamente")
     st.toast("🎾 Partido guardado")
@@ -133,6 +130,10 @@ if st.session_state.get("partido_ok"):
     st.session_state["partido_ok"] = False
 
 st.divider()
+
+# ===========================
+# ÁREA ADMINISTRADOR
+# ===========================
 
 st.subheader("🔒 Área de Administrador")
 
@@ -156,12 +157,14 @@ if password:
             if st.button("🧹 BORRAR TODO", type="primary"):
 
                 try:
+
                     borrar_todo()
 
-                    st.success("✅ Todos los partidos fueron eliminados.")
+                    st.success("✅ Todos los partidos fueron eliminados correctamente.")
                     st.toast("🧹 Base de datos reiniciada")
 
                 except Exception as e:
+
                     st.exception(e)
 
     else:
